@@ -1,0 +1,73 @@
+name: Sync Heroku Env
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync-env:
+    name: Sync env vars to Heroku
+    runs-on: ubuntu-latest
+
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_APP_NAME: ${{ vars.HEROKU_APP_NAME || 'product-php-api' }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DB_CONNECTION: pgsql
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - name: Validate required values
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          missing=0
+
+          for name in \
+            HEROKU_API_KEY \
+            HEROKU_APP_NAME \
+            DATABASE_URL \
+            DB_HOST \
+            DB_PORT \
+            DB_DATABASE \
+            DB_USERNAME \
+            DB_PASSWORD
+          do
+            if [ -z "${!name}" ]; then
+              echo "::error::${name} is not configured in GitHub Actions secrets or variables."
+              missing=1
+            fi
+          done
+
+          exit "$missing"
+
+      - name: Install Heroku CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Set Heroku config vars
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          heroku config:set \
+            DATABASE_URL="$DATABASE_URL" \
+            DB_CONNECTION="$DB_CONNECTION" \
+            DB_HOST="$DB_HOST" \
+            DB_PORT="$DB_PORT" \
+            DB_DATABASE="$DB_DATABASE" \
+            DB_USERNAME="$DB_USERNAME" \
+            DB_PASSWORD="$DB_PASSWORD" \
+            --app "$HEROKU_APP_NAME" \
+            >/dev/null
+
+          echo "Heroku config vars synced for app ${HEROKU_APP_NAME}."
