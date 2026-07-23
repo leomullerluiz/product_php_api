@@ -2,5 +2,6 @@
 .github
 .env
 .env.*
+vendor
 Dockerfile
 docker-compose.yml

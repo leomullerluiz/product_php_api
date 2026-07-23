@@ -1,0 +1,19 @@
+Options -Indexes
+
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+RedirectMatch 403 ^/(vendor|tests|migrations)(/|$)
+RedirectMatch 403 ^/api/(config|core|controller|model|service)(/|$)
+
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ api/index.php [L,QSA]

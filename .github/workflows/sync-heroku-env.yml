@@ -25,6 +25,9 @@ jobs:
       DB_DATABASE: ${{ secrets.DB_DATABASE }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_SSLMODE: ${{ vars.DB_SSLMODE || 'require' }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_TTL_SECONDS: ${{ vars.JWT_TTL_SECONDS || '3600' }}
 
     steps:
       - name: Validate required values
@@ -42,7 +45,8 @@ jobs:
             DB_PORT \
             DB_DATABASE \
             DB_USERNAME \
-            DB_PASSWORD
+            DB_PASSWORD \
+            JWT_SECRET
           do
             if [ -z "${!name}" ]; then
               echo "::error::${name} is not configured in GitHub Actions secrets or variables."
@@ -71,6 +75,9 @@ jobs:
             DB_DATABASE="$DB_DATABASE" \
             DB_USERNAME="$DB_USERNAME" \
             DB_PASSWORD="$DB_PASSWORD" \
+            DB_SSLMODE="$DB_SSLMODE" \
+            JWT_SECRET="$JWT_SECRET" \
+            JWT_TTL_SECONDS="$JWT_TTL_SECONDS" \
             --app "$HEROKU_APP_NAME" \
             >/dev/null
 
