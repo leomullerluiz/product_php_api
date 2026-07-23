@@ -37,6 +37,14 @@ GET /health/sentry
 A rota `/health/sentry` envia uma mensagem de teste para o Sentry e retorna o
 `event_id` gerado.
 
+## Swagger/OpenAPI
+
+A documentacao da API esta em `openapi.yaml` e pode ser visualizada no navegador:
+
+```text
+http://localhost:8080/docs
+```
+
 ## Execucao local com Docker
 
 Suba a aplicacao e o banco PostgreSQL:

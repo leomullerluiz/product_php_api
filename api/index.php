@@ -65,6 +65,7 @@ function registerRoutes(Router $router): void
     };
 
     $route('get', '/', 'HealthController@health');
+    $route('get', '/docs', 'DocsController@swagger');
     $route('get', '/health', 'HealthController@health');
     $route('get', '/health/database', 'HealthController@database');
     $route('get', '/health/sentry', 'HealthController@sentry');
