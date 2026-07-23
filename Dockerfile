@@ -3,8 +3,8 @@ FROM php:8.3-apache
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq-dev unzip \
-    && docker-php-ext-install pdo_pgsql \
+    && apt-get install -y --no-install-recommends libcurl4-openssl-dev libonig-dev libpq-dev unzip \
+    && docker-php-ext-install curl mbstring pdo_pgsql \
     && a2enmod rewrite \
     && echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf \
     && a2enconf servername \

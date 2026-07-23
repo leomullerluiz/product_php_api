@@ -28,6 +28,7 @@ jobs:
       DB_SSLMODE: ${{ vars.DB_SSLMODE || 'require' }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_TTL_SECONDS: ${{ vars.JWT_TTL_SECONDS || '3600' }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
     steps:
       - name: Validate required values
@@ -46,7 +47,8 @@ jobs:
             DB_DATABASE \
             DB_USERNAME \
             DB_PASSWORD \
-            JWT_SECRET
+            JWT_SECRET \
+            SENTRY_DSN
           do
             if [ -z "${!name}" ]; then
               echo "::error::${name} is not configured in GitHub Actions secrets or variables."
@@ -78,6 +80,7 @@ jobs:
             DB_SSLMODE="$DB_SSLMODE" \
             JWT_SECRET="$JWT_SECRET" \
             JWT_TTL_SECONDS="$JWT_TTL_SECONDS" \
+            SENTRY_DSN="$SENTRY_DSN" \
             --app "$HEROKU_APP_NAME" \
             >/dev/null
 

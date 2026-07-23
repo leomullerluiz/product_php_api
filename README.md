@@ -26,6 +26,17 @@ curl http://localhost:8080/auth/me \
   -H "Authorization: Bearer SEU_TOKEN_JWT"
 ```
 
+## Health checks
+
+```text
+GET /health
+GET /health/database
+GET /health/sentry
+```
+
+A rota `/health/sentry` envia uma mensagem de teste para o Sentry e retorna o
+`event_id` gerado.
+
 ## Execucao local com Docker
 
 Suba a aplicacao e o banco PostgreSQL:
@@ -58,6 +69,8 @@ Para emissao de JWT, configure:
 ```env
 JWT_SECRET=uma-chave-secreta-com-pelo-menos-32-caracteres
 JWT_TTL_SECONDS=3600
+SENTRY_DSN=https://seu-dsn-do-sentry
 ```
 
-No GitHub Actions/Heroku, cadastre `JWT_SECRET` como secret do repositorio.
+No GitHub Actions/Heroku, cadastre `JWT_SECRET` e `SENTRY_DSN` como secrets do
+repositorio.

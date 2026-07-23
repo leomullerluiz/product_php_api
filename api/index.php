@@ -36,6 +36,20 @@ $appEnv = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? 'production');
 error_reporting(E_ALL);
 ini_set('display_errors', $appEnv === 'production' ? '0' : '1');
 
+function configureSentry(string $appEnv): void
+{
+    $dsn = getenv('SENTRY_DSN') ?: ($_ENV['SENTRY_DSN'] ?? '');
+
+    if ($dsn === '' || !function_exists('\\Sentry\\init')) {
+        return;
+    }
+
+    \Sentry\init([
+        'dsn' => $dsn,
+        'environment' => $appEnv,
+    ]);
+}
+
 function configureCors(): void
 {
     $policy = new CorsPolicy(getenv('CORS_ALLOWED_ORIGINS') ?: ($_ENV['CORS_ALLOWED_ORIGINS'] ?? ''));
@@ -53,14 +67,21 @@ function registerRoutes(Router $router): void
     $route('get', '/', 'HealthController@health');
     $route('get', '/health', 'HealthController@health');
     $route('get', '/health/database', 'HealthController@database');
+    $route('get', '/health/sentry', 'HealthController@sentry');
 
     $route('post', '/auth/register', 'AuthController@register');
     $route('post', '/auth/login', 'AuthController@login');
     $route('get', '/auth/me', 'AuthController@me');
 }
 
+configureSentry($appEnv);
+
 set_exception_handler(function (Throwable $exception) use ($appEnv): void {
     $details = null;
+
+    if (function_exists('\\Sentry\\captureException')) {
+        \Sentry\captureException($exception);
+    }
 
     if ($appEnv !== 'production') {
         $details = [
