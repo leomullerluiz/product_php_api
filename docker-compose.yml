@@ -1,0 +1,39 @@
+services:
+  app:
+    container_name: product_php_api_app
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_URL: "postgres://product_php_api:product_php_api@db:5432/product_php_api_db"
+      DB_CONNECTION: "pgsql"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      DB_DATABASE: "product_php_api_db"
+      DB_USERNAME: "product_php_api"
+      DB_PASSWORD: "product_php_api"
+      DB_SSLMODE: "disable"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    container_name: product_php_api_db
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: "product_php_api_db"
+      POSTGRES_USER: "product_php_api"
+      POSTGRES_PASSWORD: "product_php_api"
+    volumes:
+      - product_php_api_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U product_php_api -d product_php_api_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  product_php_api_db_data:

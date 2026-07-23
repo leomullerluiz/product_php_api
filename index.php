@@ -57,7 +57,14 @@ $port = $database['port'] ?? 5432;
 $dbname = ltrim($database['path'], '/');
 $user = urldecode($database['user']);
 $password = urldecode($database['pass']);
-$dsn = "pgsql:host={$host};port={$port};dbname={$dbname};sslmode=require";
+$sslMode = getenv('DB_SSLMODE') ?: 'require';
+
+if (!empty($database['query'])) {
+    parse_str($database['query'], $query);
+    $sslMode = $query['sslmode'] ?? $sslMode;
+}
+
+$dsn = "pgsql:host={$host};port={$port};dbname={$dbname};sslmode={$sslMode}";
 
 try {
     $pdo = new PDO($dsn, $user, $password, [
