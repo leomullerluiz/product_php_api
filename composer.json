@@ -22,6 +22,10 @@
     ]
   },
   "scripts": {
-    "serve": "php -S localhost:8000 -t . index.php"
+    "serve": "php -S localhost:8000 -t . index.php",
+    "test": "phpunit"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.6.35"
   }
 }

@@ -97,6 +97,23 @@ A documentacao da API esta em `openapi.yaml` e pode ser visualizada no navegador
 http://localhost:8080/docs
 ```
 
+## Testes
+
+Com a aplicacao rodando em `http://localhost:8080`, execute:
+
+```bash
+vendor/bin/phpunit
+```
+
+Para apontar para outra URL ou token:
+
+```bash
+PRODUCT_API_BASE_URL=http://localhost:8080 PRODUCT_API_TEST_TOKEN=seu_token vendor/bin/phpunit
+```
+
+Se `PRODUCT_API_TEST_TOKEN` nao for informado, os testes criam um usuario
+temporario e fazem login automaticamente.
+
 ## Execucao local com Docker
 
 Suba a aplicacao e o banco PostgreSQL:
