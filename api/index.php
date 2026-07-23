@@ -73,6 +73,13 @@ function registerRoutes(Router $router): void
     $route('post', '/auth/register', 'AuthController@register');
     $route('post', '/auth/login', 'AuthController@login');
     $route('get', '/auth/me', 'AuthController@me');
+
+    $route('get', '/produtos', 'ProductController@index');
+    $route('post', '/produtos', 'ProductController@store');
+    $route('get', '/produtos/:id', 'ProductController@show');
+    $route('put', '/produtos/:id', 'ProductController@update');
+    $route('patch', '/produtos/:id', 'ProductController@patch');
+    $route('delete', '/produtos/:id', 'ProductController@destroy');
 }
 
 configureSentry($appEnv);

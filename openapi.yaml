@@ -5,8 +5,8 @@ info:
   description: |
     Documentacao Swagger/OpenAPI da API RESTful de produtos.
 
-    Rotas de health e autenticacao ja estao implementadas. As rotas de produtos
-    representam o contrato funcional definido nos requisitos do projeto.
+    Rotas de health, autenticacao e produtos implementadas conforme requisitos
+    do projeto.
   contact:
     name: Product PHP API
   license:
@@ -192,7 +192,7 @@ paths:
       tags:
         - Produtos
       summary: Lista todos os produtos
-      description: Contrato previsto nos requisitos do projeto.
+      description: Retorna todos os produtos cadastrados.
       operationId: listProducts
       security:
         - bearerAuth: []
@@ -211,7 +211,7 @@ paths:
       tags:
         - Produtos
       summary: Cria um produto
-      description: Contrato previsto nos requisitos do projeto.
+      description: Cadastra um novo produto.
       operationId: createProduct
       security:
         - bearerAuth: []
@@ -248,7 +248,7 @@ paths:
       tags:
         - Produtos
       summary: Busca um produto pelo ID
-      description: Contrato previsto nos requisitos do projeto.
+      description: Retorna os dados de um produto especifico.
       operationId: getProductById
       security:
         - bearerAuth: []
@@ -271,7 +271,7 @@ paths:
       tags:
         - Produtos
       summary: Atualiza um produto
-      description: Contrato previsto nos requisitos do projeto.
+      description: Atualiza todos os dados de um produto.
       operationId: updateProduct
       security:
         - bearerAuth: []
@@ -302,7 +302,7 @@ paths:
       tags:
         - Produtos
       summary: Atualiza parcialmente um produto
-      description: Contrato previsto nos requisitos do projeto.
+      description: Atualiza um ou mais campos de um produto.
       operationId: patchProduct
       security:
         - bearerAuth: []
@@ -333,7 +333,7 @@ paths:
       tags:
         - Produtos
       summary: Remove um produto
-      description: Contrato previsto nos requisitos do projeto.
+      description: Remove um produto existente.
       operationId: deleteProduct
       security:
         - bearerAuth: []

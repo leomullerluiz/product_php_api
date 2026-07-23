@@ -26,6 +26,58 @@ curl http://localhost:8080/auth/me \
   -H "Authorization: Bearer SEU_TOKEN_JWT"
 ```
 
+## Endpoints de produtos
+
+Todas as rotas de produtos exigem token JWT no header `Authorization`.
+
+Criar produto:
+
+```bash
+curl -X POST http://localhost:8080/produtos \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT" \
+  -d "{\"nome\":\"Notebook\",\"descricao\":\"Notebook corporativo\",\"preco\":4599.90,\"quantidade_estoque\":12,\"categoria\":\"Informatica\"}"
+```
+
+Listar produtos:
+
+```bash
+curl http://localhost:8080/produtos \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
+Buscar produto por ID:
+
+```bash
+curl http://localhost:8080/produtos/1 \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
+Atualizar produto:
+
+```bash
+curl -X PUT http://localhost:8080/produtos/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT" \
+  -d "{\"nome\":\"Notebook Pro\",\"descricao\":\"Notebook corporativo atualizado\",\"preco\":4999.90,\"quantidade_estoque\":10,\"categoria\":\"Informatica\"}"
+```
+
+Atualizar parcialmente:
+
+```bash
+curl -X PATCH http://localhost:8080/produtos/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT" \
+  -d "{\"quantidade_estoque\":8}"
+```
+
+Remover produto:
+
+```bash
+curl -X DELETE http://localhost:8080/produtos/1 \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
 ## Health checks
 
 ```text

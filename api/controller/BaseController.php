@@ -17,4 +17,28 @@ class BaseController
 
         return '';
     }
+
+    protected function authenticatedUser(Request $request): ?array
+    {
+        $token = $request->getAuthorizationBearerToken();
+
+        if ($token === null) {
+            Response::unauthorized('Token Bearer nao informado.');
+            return null;
+        }
+
+        try {
+            $user = (new AuthService())->userFromToken($token);
+        } catch (Throwable) {
+            Response::unauthorized('Token invalido ou expirado.');
+            return null;
+        }
+
+        if ($user === null) {
+            Response::unauthorized('Usuario do token nao encontrado.');
+            return null;
+        }
+
+        return $user;
+    }
 }
