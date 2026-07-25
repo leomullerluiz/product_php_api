@@ -69,6 +69,7 @@ function registerRoutes(Router $router): void
     $route('get', '/health', 'HealthController@health');
     $route('get', '/health/database', 'HealthController@database');
     $route('get', '/health/sentry', 'HealthController@sentry');
+    $route('get', '/logs', 'RequestLogController@index');
 
     $route('post', '/auth/register', 'AuthController@register');
     $route('post', '/auth/login', 'AuthController@login');
@@ -82,9 +83,8 @@ function registerRoutes(Router $router): void
     $route('delete', '/produtos/:id', 'ProductController@destroy');
 }
 
-configureSentry($appEnv);
-
-set_exception_handler(function (Throwable $exception) use ($appEnv): void {
+function respondWithUnhandledException(Throwable $exception, string $appEnv): void
+{
     $details = null;
 
     if (function_exists('\\Sentry\\captureException')) {
@@ -105,6 +105,12 @@ set_exception_handler(function (Throwable $exception) use ($appEnv): void {
         'INTERNAL_SERVER_ERROR',
         $details
     );
+}
+
+configureSentry($appEnv);
+
+set_exception_handler(function (Throwable $exception) use ($appEnv): void {
+    respondWithUnhandledException($exception, $appEnv);
 });
 
 configureCors();
@@ -116,6 +122,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'OPTIONS') {
 
 $request = new Request();
 $router = new Router();
+$requestStartedAt = microtime(true);
 
 registerRoutes($router);
-$router->dispatch($request);
+
+try {
+    $router->dispatch($request);
+} catch (Throwable $exception) {
+    respondWithUnhandledException($exception, $appEnv);
+} finally {
+    (new RequestLogService())->record($request, http_response_code() ?: 200, $requestStartedAt);
+}

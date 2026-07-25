@@ -13,15 +13,17 @@ info:
     name: MIT
     url: https://opensource.org/license/mit/
 servers:
-  - url: http://localhost:8080
-    description: Ambiente local com Docker
-  - url: http://localhost:8080/api/v1
-    description: Ambiente local com prefixo versionado
+  - url: /
+    description: Ambiente atual
+  - url: /api/v1
+    description: Ambiente atual com prefixo versionado
 tags:
   - name: Health
     description: Monitoramento da API e integracoes.
   - name: Auth
     description: Cadastro, login e sessao via JWT.
+  - name: Logs
+    description: Consulta paginada dos logs de requisicoes.
   - name: Produtos
     description: CRUD de produtos conforme requisitos do case.
 security: []
@@ -184,6 +186,32 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /logs:
+    get:
+      tags:
+        - Logs
+      summary: Lista logs de requisicoes
+      description: Retorna os logs ordenados do mais recente para o mais antigo. A consulta exige paginacao.
+      operationId: listRequestLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Lista paginada de logs.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestLogPaginatedResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
         "500":
           $ref: "#/components/responses/InternalServerError"
 
@@ -357,6 +385,25 @@ components:
       bearerFormat: JWT
 
   parameters:
+    Page:
+      name: page
+      in: query
+      required: true
+      description: Numero da pagina, iniciando em zero.
+      schema:
+        type: integer
+        minimum: 0
+        example: 0
+    PageSize:
+      name: pageSize
+      in: query
+      required: true
+      description: Quantidade de itens por pagina. Maximo de 100.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        example: 20
     ProductId:
       name: id
       in: path
@@ -596,6 +643,76 @@ components:
                   example: 3600
                 user:
                   $ref: "#/components/schemas/User"
+
+    RequestLog:
+      type: object
+      required:
+        - id
+        - method
+        - uri
+        - status_code
+        - duration_ms
+        - created_at
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 42
+        method:
+          type: string
+          example: GET
+        uri:
+          type: string
+          example: /produtos?page=0
+        status_code:
+          type: integer
+          example: 200
+        client_ip:
+          type: string
+          nullable: true
+          example: 172.18.0.1
+        user_agent:
+          type: string
+          nullable: true
+          example: PostmanRuntime/7.51.1
+        duration_ms:
+          type: integer
+          example: 18
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-07-25T16:52:33+00:00"
+
+    RequestLogPaginatedResponse:
+      type: object
+      required:
+        - data
+        - currentPage
+        - pageCount
+        - totalCount
+        - pageSize
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RequestLog"
+        currentPage:
+          type: integer
+          minimum: 0
+          example: 0
+        pageCount:
+          type: integer
+          minimum: 0
+          example: 3
+        totalCount:
+          type: integer
+          minimum: 0
+          example: 48
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 20
 
     Product:
       type: object

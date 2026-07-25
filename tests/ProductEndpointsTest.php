@@ -122,6 +122,49 @@ final class ProductEndpointsTest extends TestCase
         self::assertNotEmpty($body['error']['details']);
     }
 
+    public function testRequestLogsEndpointRequiresTokenAndPagination(): void
+    {
+        $withoutToken = self::request('GET', '/logs?page=0&pageSize=10');
+        $withoutTokenBody = self::json($withoutToken);
+
+        self::assertSame(401, $withoutToken['status']);
+        self::assertFalse($withoutTokenBody['success']);
+        self::assertSame('UNAUTHORIZED', $withoutTokenBody['error']['code']);
+
+        $withoutPagination = self::request('GET', '/logs', null, self::authHeaders(self::token()));
+        $withoutPaginationBody = self::json($withoutPagination);
+
+        self::assertSame(422, $withoutPagination['status']);
+        self::assertFalse($withoutPaginationBody['success']);
+        self::assertSame('VALIDATION_ERROR', $withoutPaginationBody['error']['code']);
+
+        $response = self::request('GET', '/logs?page=0&pageSize=10', null, self::authHeaders(self::token()));
+        $body = self::json($response);
+
+        self::assertSame(200, $response['status']);
+        self::assertArrayHasKey('data', $body);
+        self::assertArrayHasKey('currentPage', $body);
+        self::assertArrayHasKey('pageCount', $body);
+        self::assertArrayHasKey('totalCount', $body);
+        self::assertArrayHasKey('pageSize', $body);
+        self::assertSame(0, $body['currentPage']);
+        self::assertSame(10, $body['pageSize']);
+        self::assertIsArray($body['data']);
+
+        if ($body['data'] !== []) {
+            $ids = array_column($body['data'], 'id');
+            $idsSortedFromNewest = $ids;
+            rsort($idsSortedFromNewest, SORT_NUMERIC);
+
+            self::assertSame($idsSortedFromNewest, $ids);
+            self::assertArrayHasKey('method', $body['data'][0]);
+            self::assertArrayHasKey('uri', $body['data'][0]);
+            self::assertArrayHasKey('status_code', $body['data'][0]);
+            self::assertArrayHasKey('duration_ms', $body['data'][0]);
+            self::assertArrayHasKey('created_at', $body['data'][0]);
+        }
+    }
+
     private static function token(): string
     {
         if (self::$token !== null) {

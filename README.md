@@ -78,6 +78,28 @@ curl -X DELETE http://localhost:8080/produtos/1 \
   -H "Authorization: Bearer SEU_TOKEN_JWT"
 ```
 
+## Logs de requisicoes
+
+A rota de logs exige token JWT e paginacao obrigatoria. Os registros sao
+retornados do mais recente para o mais antigo.
+
+```bash
+curl "http://localhost:8080/logs?page=0&pageSize=20" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
+Formato de resposta:
+
+```json
+{
+  "data": [],
+  "currentPage": 0,
+  "pageCount": 0,
+  "totalCount": 0,
+  "pageSize": 20
+}
+```
+
 ## Health checks
 
 ```text
