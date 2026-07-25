@@ -78,11 +78,13 @@ class Request
             return null;
         }
 
-        if (preg_match('/^JWT\s+(.+)$/i', trim($authorization), $matches) !== 1) {
+        $token = trim($authorization);
+
+        if ($token === '' || preg_match('/\s/', $token) === 1) {
             return null;
         }
 
-        return trim($matches[1]);
+        return $token;
     }
 
     public function getOrigin(): ?string

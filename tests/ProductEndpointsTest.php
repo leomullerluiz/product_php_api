@@ -46,6 +46,18 @@ final class ProductEndpointsTest extends TestCase
         self::assertSame('UNAUTHORIZED', $body['error']['code']);
     }
 
+    public function testJwtPrefixIsRejected(): void
+    {
+        $response = self::request('GET', '/auth/me', null, [
+            'Authorization: JWT ' . self::token(),
+        ]);
+        $body = self::json($response);
+
+        self::assertSame(401, $response['status']);
+        self::assertFalse($body['success']);
+        self::assertSame('UNAUTHORIZED', $body['error']['code']);
+    }
+
     public function testLoginReturnsJwtTokenUsingHs256(): void
     {
         $login = 'phpunit_jwt_' . time() . '_' . random_int(1000, 9999);
@@ -324,7 +336,7 @@ final class ProductEndpointsTest extends TestCase
     private static function authHeaders(string $token): array
     {
         return [
-            'Authorization: JWT ' . $token,
+            'Authorization: ' . $token,
         ];
     }
 

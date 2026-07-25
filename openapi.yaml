@@ -409,7 +409,7 @@ components:
       type: apiKey
       in: header
       name: Authorization
-      description: Envie o token no formato `JWT <token>`. O token JWT e assinado com HS256.
+      description: Envie apenas o token JWT no header, sem prefixos como `JWT` ou `Bearer`. O token e assinado com HS256.
 
   parameters:
     Page:

@@ -280,7 +280,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -306,7 +306,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -333,7 +333,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -358,7 +358,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -384,7 +384,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -418,7 +418,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -453,7 +453,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -488,7 +488,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -524,7 +524,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
@@ -560,7 +560,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "JWT {{jwt_token}}",
+            "value": "{{jwt_token}}",
             "type": "text"
           }
         ],
