@@ -1,0 +1,224 @@
+{
+  "info": {
+    "_postman_id": "a388ef19-79b7-41a5-81d5-3df2c9ddf09b",
+    "name": "product_php_api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44992574"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health - Database Connection",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/health/database",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "health",
+            "database"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health - Sentry",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/health/sentry",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "health",
+            "sentry"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"login\": \"admin123\",\r\n    \"password\": \"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Administrador\",\r\n    \"login\": \"admin123\",\r\n    \"password\": \"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Me",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ4NDM0MjMsIm5iZiI6MTc4NDg0MzQyMywiZXhwIjoxNzg0ODQ3MDIzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.nzzVMIrkR9ixHFNdVaujY-PdPHav8AXwVdPKhhyJxyM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/auth/me",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Products - List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ4NDM0MjMsIm5iZiI6MTc4NDg0MzQyMywiZXhwIjoxNzg0ODQ3MDIzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.nzzVMIrkR9ixHFNdVaujY-PdPHav8AXwVdPKhhyJxyM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/produtos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Products - Insert",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ4NDM0MjMsIm5iZiI6MTc4NDg0MzQyMywiZXhwIjoxNzg0ODQ3MDIzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.nzzVMIrkR9ixHFNdVaujY-PdPHav8AXwVdPKhhyJxyM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"string\",\r\n    \"descricao\": \"string\",\r\n    \"preco\": \"00.00\",\r\n    \"quantidade_estoque\": 123,\r\n    \"categoria\": \"string\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/produtos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
