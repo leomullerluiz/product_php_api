@@ -180,6 +180,37 @@ final class ProductEndpointsTest extends TestCase
         self::assertSame($body['totalCount'], $secondBody['totalCount']);
     }
 
+    public function testRequestErrorLogsEndpointFiltersStatusCodes(): void
+    {
+        $token = self::token();
+
+        self::request('GET', '/produtos/999999999', null, self::authHeaders($token));
+
+        $response = self::request('GET', '/logs/errors?page=0&pageSize=10', null, self::authHeaders($token));
+        $body = self::json($response);
+
+        self::assertSame(200, $response['status']);
+        self::assertArrayHasKey('data', $body);
+        self::assertArrayHasKey('currentPage', $body);
+        self::assertArrayHasKey('pageCount', $body);
+        self::assertArrayHasKey('totalCount', $body);
+        self::assertArrayHasKey('pageSize', $body);
+        self::assertSame(0, $body['currentPage']);
+        self::assertSame(10, $body['pageSize']);
+        self::assertNotEmpty($body['data']);
+
+        foreach ($body['data'] as $log) {
+            self::assertNotContains($log['status_code'], [200, 204]);
+            self::assertStringNotContainsString('/logs', $log['uri']);
+        }
+
+        $secondResponse = self::request('GET', '/logs/errors?page=0&pageSize=10', null, self::authHeaders($token));
+        $secondBody = self::json($secondResponse);
+
+        self::assertSame(200, $secondResponse['status']);
+        self::assertSame($body['totalCount'], $secondBody['totalCount']);
+    }
+
     private static function token(): string
     {
         if (self::$token !== null) {

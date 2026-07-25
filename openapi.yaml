@@ -215,6 +215,32 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
 
+  /logs/errors:
+    get:
+      tags:
+        - Logs
+      summary: Lista logs com status diferente de 200 e 204
+      description: Retorna os logs dos endpoints cujo status HTTP nao seja 200 OK nem 204 No Content, ordenados do mais recente para o mais antigo. A consulta exige paginacao.
+      operationId: listRequestErrorLogs
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Lista paginada de logs filtrados por status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestLogPaginatedResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
   /produtos:
     get:
       tags:

@@ -45,8 +45,18 @@ class RequestLogModel
 
     public static function paginate(int $page, int $pageSize): array
     {
+        return self::paginateWhere($page, $pageSize);
+    }
+
+    public static function paginateErrors(int $page, int $pageSize): array
+    {
+        return self::paginateWhere($page, $pageSize, 'WHERE status_code NOT IN (200, 204)');
+    }
+
+    private static function paginateWhere(int $page, int $pageSize, string $whereClause = ''): array
+    {
         $pdo = Database::getInstance()->getConnection();
-        $totalCount = (int) $pdo->query('SELECT COUNT(*) FROM request_logs')->fetchColumn();
+        $totalCount = (int) $pdo->query('SELECT COUNT(*) FROM request_logs ' . $whereClause)->fetchColumn();
         $pageCount = $totalCount === 0 ? 0 : (int) ceil($totalCount / $pageSize);
         $offset = $page * $pageSize;
 
@@ -63,6 +73,7 @@ class RequestLogModel
                     user_name,
                     created_at
              FROM request_logs
+             ' . $whereClause . '
              ORDER BY created_at DESC, id DESC
              LIMIT :limit OFFSET :offset'
         );

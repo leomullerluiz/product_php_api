@@ -34,9 +34,21 @@ class RequestLogService
         return RequestLogModel::paginate($page, $pageSize);
     }
 
+    public function paginateErrors(int $page, int $pageSize): array
+    {
+        return RequestLogModel::paginateErrors($page, $pageSize);
+    }
+
     private function shouldSkip(Request $request): bool
     {
-        return in_array($request->uri(), ['/logs', '/api/logs', '/api/v1/logs'], true);
+        return in_array($request->uri(), [
+            '/logs',
+            '/api/logs',
+            '/api/v1/logs',
+            '/logs/errors',
+            '/api/logs/errors',
+            '/api/v1/logs/errors',
+        ], true);
     }
 
     private function userFromRequest(Request $request): ?array

@@ -27,6 +27,22 @@ class RequestLogController extends BaseController
         Response::json($this->requestLogService->paginate($page, $pageSize));
     }
 
+    public function errors(Request $request, array $params = []): void
+    {
+        if ($this->authenticatedUser($request) === null) {
+            return;
+        }
+
+        [$page, $pageSize, $errors] = $this->paginationParams($request);
+
+        if ($errors !== []) {
+            Response::validationError($errors);
+            return;
+        }
+
+        Response::json($this->requestLogService->paginateErrors($page, $pageSize));
+    }
+
     private function paginationParams(Request $request): array
     {
         $errors = [];

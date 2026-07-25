@@ -88,6 +88,13 @@ curl "http://localhost:8080/logs?page=0&pageSize=20" \
   -H "Authorization: Bearer SEU_TOKEN_JWT"
 ```
 
+Para listar apenas logs com status diferente de `200 OK` e `204 No Content`:
+
+```bash
+curl "http://localhost:8080/logs/errors?page=0&pageSize=20" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
 Formato de resposta:
 
 ```json
@@ -116,8 +123,8 @@ Formato de resposta:
 }
 ```
 
-Requisicoes para `/logs`, `/api/logs` e `/api/v1/logs` nao sao gravadas na
-tabela de logs.
+Requisicoes para `/logs`, `/logs/errors`, `/api/logs`, `/api/logs/errors`,
+`/api/v1/logs` e `/api/v1/logs/errors` nao sao gravadas na tabela de logs.
 
 ## Health checks
 

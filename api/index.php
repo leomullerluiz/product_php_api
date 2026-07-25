@@ -69,6 +69,7 @@ function registerRoutes(Router $router): void
     $route('get', '/health', 'HealthController@health');
     $route('get', '/health/database', 'HealthController@database');
     $route('get', '/health/sentry', 'HealthController@sentry');
+    $route('get', '/logs/errors', 'RequestLogController@errors');
     $route('get', '/logs', 'RequestLogController@index');
 
     $route('post', '/auth/register', 'AuthController@register');
