@@ -1,5 +1,12 @@
 # product_php_api
-Api for product management 
+API RESTful para gerenciamento de produtos.
+
+## Links do projeto
+
+- API local: `http://localhost:8080`
+- API hospedada na Heroku: `https://product-php-api-d8ee8676232a.herokuapp.com`
+- Swagger local: `http://localhost:8080/docs`
+- Swagger na Heroku: `https://product-php-api-d8ee8676232a.herokuapp.com/docs`
 
 ## Endpoints de autenticacao
 
@@ -143,6 +150,7 @@ A documentacao da API esta em `openapi.yaml` e pode ser visualizada no navegador
 
 ```text
 http://localhost:8080/docs
+https://product-php-api-d8ee8676232a.herokuapp.com/docs
 ```
 
 ## Testes
