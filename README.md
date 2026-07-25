@@ -92,13 +92,32 @@ Formato de resposta:
 
 ```json
 {
-  "data": [],
+  "data": [
+    {
+      "id": 1,
+      "method": "GET",
+      "uri": "/produtos",
+      "status_code": 200,
+      "client_ip": "000.000.000.000",
+      "user_agent": "PostmanRuntime/7.51.1",
+      "duration_ms": 18,
+      "created_at": "2026-07-25 20:10:32.123456+00",
+      "user": {
+        "id": 3,
+        "login": "admin123",
+        "name": "Administrador"
+      }
+    }
+  ],
   "currentPage": 0,
   "pageCount": 0,
   "totalCount": 0,
   "pageSize": 20
 }
 ```
+
+Requisicoes para `/logs`, `/api/logs` e `/api/v1/logs` nao sao gravadas na
+tabela de logs.
 
 ## Health checks
 

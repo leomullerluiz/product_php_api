@@ -138,6 +138,10 @@ final class ProductEndpointsTest extends TestCase
         self::assertFalse($withoutPaginationBody['success']);
         self::assertSame('VALIDATION_ERROR', $withoutPaginationBody['error']['code']);
 
+        $me = self::request('GET', '/auth/me', null, self::authHeaders(self::token()));
+        $meBody = self::json($me);
+        self::assertSame(200, $me['status']);
+
         $response = self::request('GET', '/logs?page=0&pageSize=10', null, self::authHeaders(self::token()));
         $body = self::json($response);
 
@@ -160,9 +164,20 @@ final class ProductEndpointsTest extends TestCase
             self::assertArrayHasKey('method', $body['data'][0]);
             self::assertArrayHasKey('uri', $body['data'][0]);
             self::assertArrayHasKey('status_code', $body['data'][0]);
+            self::assertArrayHasKey('user', $body['data'][0]);
             self::assertArrayHasKey('duration_ms', $body['data'][0]);
             self::assertArrayHasKey('created_at', $body['data'][0]);
+            self::assertNotNull($body['data'][0]['user']);
+            self::assertSame($meBody['data']['user']['id'], $body['data'][0]['user']['id']);
+            self::assertSame($meBody['data']['user']['login'], $body['data'][0]['user']['login']);
+            self::assertStringNotContainsString('/logs', $body['data'][0]['uri']);
         }
+
+        $secondResponse = self::request('GET', '/logs?page=0&pageSize=10', null, self::authHeaders(self::token()));
+        $secondBody = self::json($secondResponse);
+
+        self::assertSame(200, $secondResponse['status']);
+        self::assertSame($body['totalCount'], $secondBody['totalCount']);
     }
 
     private static function token(): string

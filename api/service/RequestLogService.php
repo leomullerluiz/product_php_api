@@ -4,7 +4,13 @@ class RequestLogService
 {
     public function record(Request $request, int $statusCode, float $startedAt): void
     {
+        if ($this->shouldSkip($request)) {
+            return;
+        }
+
         try {
+            $user = $this->userFromRequest($request);
+
             RequestLogModel::create([
                 'method' => $request->method(),
                 'uri' => $this->requestUri(),
@@ -12,6 +18,9 @@ class RequestLogService
                 'client_ip' => $request->getClientIp(),
                 'user_agent' => $this->header($request, 'User-Agent'),
                 'duration_ms' => $this->durationMs($startedAt),
+                'user_id' => $user['id'] ?? null,
+                'user_login' => $user['login'] ?? null,
+                'user_name' => $user['name'] ?? null,
             ]);
         } catch (Throwable $exception) {
             if (function_exists('\\Sentry\\captureException')) {
@@ -23,6 +32,26 @@ class RequestLogService
     public function paginate(int $page, int $pageSize): array
     {
         return RequestLogModel::paginate($page, $pageSize);
+    }
+
+    private function shouldSkip(Request $request): bool
+    {
+        return in_array($request->uri(), ['/logs', '/api/logs', '/api/v1/logs'], true);
+    }
+
+    private function userFromRequest(Request $request): ?array
+    {
+        $token = $request->getAuthorizationBearerToken();
+
+        if ($token === null) {
+            return null;
+        }
+
+        try {
+            return (new AuthService())->userFromToken($token);
+        } catch (Throwable) {
+            return null;
+        }
     }
 
     private function requestUri(): string

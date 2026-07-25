@@ -6,8 +6,28 @@ class RequestLogModel
     {
         $pdo = Database::getInstance()->getConnection();
         $statement = $pdo->prepare(
-            'INSERT INTO request_logs (method, uri, status_code, client_ip, user_agent, duration_ms)
-             VALUES (:method, :uri, :status_code, :client_ip, :user_agent, :duration_ms)'
+            'INSERT INTO request_logs (
+                method,
+                uri,
+                status_code,
+                client_ip,
+                user_agent,
+                duration_ms,
+                user_id,
+                user_login,
+                user_name
+             )
+             VALUES (
+                :method,
+                :uri,
+                :status_code,
+                :client_ip,
+                :user_agent,
+                :duration_ms,
+                :user_id,
+                :user_login,
+                :user_name
+             )'
         );
 
         $statement->execute([
@@ -17,6 +37,9 @@ class RequestLogModel
             ':client_ip' => $data['client_ip'],
             ':user_agent' => $data['user_agent'],
             ':duration_ms' => $data['duration_ms'],
+            ':user_id' => $data['user_id'],
+            ':user_login' => $data['user_login'],
+            ':user_name' => $data['user_name'],
         ]);
     }
 
@@ -28,7 +51,17 @@ class RequestLogModel
         $offset = $page * $pageSize;
 
         $statement = $pdo->prepare(
-            'SELECT id, method, uri, status_code, client_ip, user_agent, duration_ms, created_at
+            'SELECT id,
+                    method,
+                    uri,
+                    status_code,
+                    client_ip,
+                    user_agent,
+                    duration_ms,
+                    user_id,
+                    user_login,
+                    user_name,
+                    created_at
              FROM request_logs
              ORDER BY created_at DESC, id DESC
              LIMIT :limit OFFSET :offset'
@@ -52,7 +85,23 @@ class RequestLogModel
         $log['id'] = (int) $log['id'];
         $log['status_code'] = (int) $log['status_code'];
         $log['duration_ms'] = (int) $log['duration_ms'];
+        $log['user'] = self::formatUser($log);
+
+        unset($log['user_id'], $log['user_login'], $log['user_name']);
 
         return $log;
+    }
+
+    private static function formatUser(array $log): ?array
+    {
+        if ($log['user_id'] === null && $log['user_login'] === null) {
+            return null;
+        }
+
+        return [
+            'id' => $log['user_id'] === null ? null : (int) $log['user_id'],
+            'login' => $log['user_login'],
+            'name' => $log['user_name'],
+        ];
     }
 }

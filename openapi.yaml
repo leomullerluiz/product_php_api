@@ -651,6 +651,7 @@ components:
         - method
         - uri
         - status_code
+        - user
         - duration_ms
         - created_at
       properties:
@@ -675,6 +676,11 @@ components:
           type: string
           nullable: true
           example: PostmanRuntime/7.51.1
+        user:
+          type: object
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/RequestLogUser"
         duration_ms:
           type: integer
           example: 18
@@ -682,6 +688,28 @@ components:
           type: string
           format: date-time
           example: "2026-07-25T16:52:33+00:00"
+
+    RequestLogUser:
+      type: object
+      nullable: true
+      required:
+        - id
+        - login
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+          example: 3
+        login:
+          type: string
+          nullable: true
+          example: admin123
+        name:
+          type: string
+          nullable: true
+          example: Administrador
 
     RequestLogPaginatedResponse:
       type: object
