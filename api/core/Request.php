@@ -66,7 +66,7 @@ class Request
         return $this->jsonBody;
     }
 
-    public function getAuthorizationBearerToken(): ?string
+    public function getAuthorizationJwtToken(): ?string
     {
         $authorization = $this->headers['Authorization']
             ?? $this->headers['authorization']
@@ -78,7 +78,7 @@ class Request
             return null;
         }
 
-        if (preg_match('/^Bearer\s+(.+)$/i', trim($authorization), $matches) !== 1) {
+        if (preg_match('/^JWT\s+(.+)$/i', trim($authorization), $matches) !== 1) {
             return null;
         }
 

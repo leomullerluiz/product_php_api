@@ -31,7 +31,7 @@ class AuthService
         $token = $this->createToken($safeUser);
 
         return [
-            'token_type' => 'Bearer',
+            'token_type' => 'JWT',
             'access_token' => $token,
             'expires_in' => $this->ttl(),
             'user' => $safeUser,

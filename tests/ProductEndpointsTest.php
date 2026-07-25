@@ -24,7 +24,7 @@ final class ProductEndpointsTest extends TestCase
         }
     }
 
-    public function testProductEndpointsRequireBearerToken(): void
+    public function testProductEndpointsRequireJwtToken(): void
     {
         $response = self::request('GET', '/produtos');
         $body = self::json($response);
@@ -32,6 +32,49 @@ final class ProductEndpointsTest extends TestCase
         self::assertSame(401, $response['status']);
         self::assertFalse($body['success']);
         self::assertSame('UNAUTHORIZED', $body['error']['code']);
+    }
+
+    public function testBearerTokenIsRejected(): void
+    {
+        $response = self::request('GET', '/auth/me', null, [
+            'Authorization: Bearer ' . self::token(),
+        ]);
+        $body = self::json($response);
+
+        self::assertSame(401, $response['status']);
+        self::assertFalse($body['success']);
+        self::assertSame('UNAUTHORIZED', $body['error']['code']);
+    }
+
+    public function testLoginReturnsJwtTokenUsingHs256(): void
+    {
+        $login = 'phpunit_jwt_' . time() . '_' . random_int(1000, 9999);
+        $password = 'admin123';
+
+        $register = self::request('POST', '/auth/register', [
+            'login' => $login,
+            'senha' => $password,
+            'name' => 'PHPUnit JWT Tester',
+        ]);
+
+        self::assertSame(201, $register['status']);
+
+        $loginResponse = self::request('POST', '/auth/login', [
+            'login' => $login,
+            'senha' => $password,
+        ]);
+        $body = self::json($loginResponse);
+        $token = $body['data']['access_token'];
+        $jwtHeader = self::jwtHeader($token);
+
+        self::assertSame(200, $loginResponse['status']);
+        self::assertSame('JWT', $body['data']['token_type']);
+        self::assertSame('JWT', $jwtHeader['typ']);
+        self::assertSame('HS256', $jwtHeader['alg']);
+
+        $me = self::request('GET', '/auth/me', null, self::authHeaders($token));
+
+        self::assertSame(200, $me['status']);
     }
 
     public function testCreateListShowUpdatePatchAndDeleteProduct(): void
@@ -257,15 +300,31 @@ final class ProductEndpointsTest extends TestCase
         $body = self::json($loginResponse);
 
         self::assertSame(200, $loginResponse['status']);
+        self::assertSame('JWT', $body['data']['token_type']);
         self::assertArrayHasKey('access_token', $body['data']);
 
         return $body['data']['access_token'];
     }
 
+    private static function jwtHeader(string $token): array
+    {
+        $parts = explode('.', $token);
+
+        self::assertCount(3, $parts);
+
+        $payload = strtr($parts[0], '-_', '+/');
+        $payload .= str_repeat('=', (4 - strlen($payload) % 4) % 4);
+        $decoded = json_decode(base64_decode($payload), true);
+
+        self::assertIsArray($decoded);
+
+        return $decoded;
+    }
+
     private static function authHeaders(string $token): array
     {
         return [
-            'Authorization: Bearer ' . $token,
+            'Authorization: JWT ' . $token,
         ];
     }
 

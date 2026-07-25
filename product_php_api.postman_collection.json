@@ -154,7 +154,21 @@
           ]
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body && body.data && body.data.access_token) {",
+              "  pm.collectionVariables.set('jwt_token', body.data.access_token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
     },
     {
       "name": "[Production] Auth - Login",
@@ -184,7 +198,21 @@
           ]
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body && body.data && body.data.access_token) {",
+              "  pm.collectionVariables.set('jwt_token', body.data.access_token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
     },
     {
       "name": "Auth - Register",
@@ -248,18 +276,14 @@
     {
       "name": "Auth - Me",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ4NDM0MjMsIm5iZiI6MTc4NDg0MzQyMywiZXhwIjoxNzg0ODQ3MDIzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.nzzVMIrkR9ixHFNdVaujY-PdPHav8AXwVdPKhhyJxyM",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "http://localhost:8080/auth/me",
           "protocol": "http",
@@ -278,18 +302,14 @@
     {
       "name": "[Production] Auth - Me",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTQ3ODgsIm5iZiI6MTc4NDk5NDc4OCwiZXhwIjoxNzg0OTk4Mzg4LCJzdWIiOiIxIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.Dn7_DYy2iCT5LRjsH70wOM4hWiAR7c_8TVdKqLNM-VI",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "https://product-php-api-d8ee8676232a.herokuapp.com/auth/me",
           "protocol": "https",
@@ -309,18 +329,14 @@
     {
       "name": "Products - List",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTA5MTMsIm5iZiI6MTc4NDk5MDkxMywiZXhwIjoxNzg0OTk0NTEzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.JIHWHqoXiYh-UHoSITR9N-5rI2DGyQJJYm37JjqjnQA",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "http://localhost:8080/produtos",
           "protocol": "http",
@@ -338,18 +354,14 @@
     {
       "name": "[Production] Products - List",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTUwODgsIm5iZiI6MTc4NDk5NTA4OCwiZXhwIjoxNzg0OTk4Njg4LCJzdWIiOiIxIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.gNJQHRendpkDXLT9z2-8v5uDMtz0Gcy45_YJ6Bfn6x0",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "https://product-php-api-d8ee8676232a.herokuapp.com/produtos",
           "protocol": "https",
@@ -368,18 +380,14 @@
     {
       "name": "Products - Insert",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ4NDM0MjMsIm5iZiI6MTc4NDg0MzQyMywiZXhwIjoxNzg0ODQ3MDIzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.nzzVMIrkR9ixHFNdVaujY-PdPHav8AXwVdPKhhyJxyM",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n    \"nome\": \"string\",\r\n    \"descricao\": \"string\",\r\n    \"preco\": \"00.00\",\r\n    \"quantidade_estoque\": 123,\r\n    \"categoria\": \"string\"\r\n}",
@@ -406,18 +414,14 @@
     {
       "name": "[Production] Products - Insert",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTUwODgsIm5iZiI6MTc4NDk5NTA4OCwiZXhwIjoxNzg0OTk4Njg4LCJzdWIiOiIxIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.gNJQHRendpkDXLT9z2-8v5uDMtz0Gcy45_YJ6Bfn6x0",
-              "type": "string"
-            }
-          ]
-        },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n    \"nome\": \"string\",\r\n    \"descricao\": \"string\",\r\n    \"preco\": \"00.00\",\r\n    \"quantidade_estoque\": 123,\r\n    \"categoria\": \"string\"\r\n}",
@@ -445,18 +449,14 @@
     {
       "name": "Logs",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTA5MTMsIm5iZiI6MTc4NDk5MDkxMywiZXhwIjoxNzg0OTk0NTEzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.JIHWHqoXiYh-UHoSITR9N-5rI2DGyQJJYm37JjqjnQA",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "http://localhost:8080/logs?page=0&pageSize=20",
           "protocol": "http",
@@ -484,18 +484,14 @@
     {
       "name": "[Production] Logs",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTUwODgsIm5iZiI6MTc4NDk5NTA4OCwiZXhwIjoxNzg0OTk4Njg4LCJzdWIiOiIxIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.gNJQHRendpkDXLT9z2-8v5uDMtz0Gcy45_YJ6Bfn6x0",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "https://product-php-api-d8ee8676232a.herokuapp.com/logs?page=0&pageSize=20",
           "protocol": "https",
@@ -524,18 +520,14 @@
     {
       "name": "Logs - Errors",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTUyMzMsIm5iZiI6MTc4NDk5NTIzMywiZXhwIjoxNzg0OTk4ODMzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.HUFaFUKhbeqiLnJd0BaPjI9yUuP_1L6JfVwsxXKxTEA",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
           "raw": "http://localhost:8080/logs/errors?page=0&pageSize=20",
           "protocol": "http",
@@ -564,20 +556,16 @@
     {
       "name": "[Production] Logs Errors",
       "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0X3BocF9hcGkiLCJpYXQiOjE3ODQ5OTA5MTMsIm5iZiI6MTc4NDk5MDkxMywiZXhwIjoxNzg0OTk0NTEzLCJzdWIiOiIzIiwibG9naW4iOiJhZG1pbjEyMyIsIm5hbWUiOiJBZG1pbmlzdHJhZG9yIn0.JIHWHqoXiYh-UHoSITR9N-5rI2DGyQJJYm37JjqjnQA",
-              "type": "string"
-            }
-          ]
-        },
         "method": "GET",
-        "header": [],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "JWT {{jwt_token}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "https://product-php-api-d8ee8676232a.herokuapp.com/logs?page=0&pageSize=20",
+          "raw": "https://product-php-api-d8ee8676232a.herokuapp.com/logs/errors?page=0&pageSize=20",
           "protocol": "https",
           "host": [
             "product-php-api-d8ee8676232a",
@@ -585,7 +573,8 @@
             "com"
           ],
           "path": [
-            "logs"
+            "logs",
+            "errors"
           ],
           "query": [
             {
@@ -600,6 +589,13 @@
         }
       },
       "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
     }
   ]
 }

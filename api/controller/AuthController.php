@@ -58,10 +58,10 @@ class AuthController extends BaseController
 
     public function me(Request $request, array $params = []): void
     {
-        $token = $request->getAuthorizationBearerToken();
+        $token = $request->getAuthorizationJwtToken();
 
         if ($token === null) {
-            Response::unauthorized('Token Bearer nao informado.');
+            Response::unauthorized('Token JWT nao informado.');
             return;
         }
 

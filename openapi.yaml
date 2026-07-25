@@ -176,7 +176,7 @@ paths:
       summary: Retorna o usuario autenticado
       operationId: getAuthenticatedUser
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       responses:
         "200":
           description: Usuario autenticado.
@@ -197,7 +197,7 @@ paths:
       description: Retorna os logs ordenados do mais recente para o mais antigo. A consulta exige paginacao.
       operationId: listRequestLogs
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/Page"
         - $ref: "#/components/parameters/PageSize"
@@ -223,7 +223,7 @@ paths:
       description: Retorna os logs dos endpoints cujo status HTTP nao seja 200 OK nem 204 No Content, ordenados do mais recente para o mais antigo. A consulta exige paginacao.
       operationId: listRequestErrorLogs
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/Page"
         - $ref: "#/components/parameters/PageSize"
@@ -249,7 +249,7 @@ paths:
       description: Retorna todos os produtos cadastrados.
       operationId: listProducts
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       responses:
         "200":
           description: Lista de produtos.
@@ -268,7 +268,7 @@ paths:
       description: Cadastra um novo produto.
       operationId: createProduct
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       requestBody:
         required: true
         content:
@@ -305,7 +305,7 @@ paths:
       description: Retorna os dados de um produto especifico.
       operationId: getProductById
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       responses:
@@ -328,7 +328,7 @@ paths:
       description: Atualiza todos os dados de um produto.
       operationId: updateProduct
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       requestBody:
@@ -359,7 +359,7 @@ paths:
       description: Atualiza um ou mais campos de um produto.
       operationId: patchProduct
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       requestBody:
@@ -390,7 +390,7 @@ paths:
       description: Remove um produto existente.
       operationId: deleteProduct
       security:
-        - bearerAuth: []
+        - jwtAuth: []
       parameters:
         - $ref: "#/components/parameters/ProductId"
       responses:
@@ -405,10 +405,11 @@ paths:
 
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    jwtAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Envie o token no formato `JWT <token>`. O token JWT e assinado com HS256.
 
   parameters:
     Page:
@@ -442,7 +443,7 @@ components:
 
   responses:
     Unauthorized:
-      description: Token ausente, invalido ou credenciais invalidas.
+      description: Token JWT ausente, invalido ou credenciais invalidas.
       content:
         application/json:
           schema:
@@ -660,7 +661,7 @@ components:
               properties:
                 token_type:
                   type: string
-                  example: Bearer
+                  example: JWT
                 access_token:
                   type: string
                   example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...

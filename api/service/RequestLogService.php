@@ -53,7 +53,7 @@ class RequestLogService
 
     private function userFromRequest(Request $request): ?array
     {
-        $token = $request->getAuthorizationBearerToken();
+        $token = $request->getAuthorizationJwtToken();
 
         if ($token === null) {
             return null;

@@ -20,10 +20,10 @@ class BaseController
 
     protected function authenticatedUser(Request $request): ?array
     {
-        $token = $request->getAuthorizationBearerToken();
+        $token = $request->getAuthorizationJwtToken();
 
         if ($token === null) {
-            Response::unauthorized('Token Bearer nao informado.');
+            Response::unauthorized('Token JWT nao informado.');
             return null;
         }
 
