@@ -219,6 +219,14 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Logs",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
     }
   ]
 }
