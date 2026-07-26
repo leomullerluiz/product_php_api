@@ -81,12 +81,21 @@ final class ProductEndpointsTest extends TestCase
 
         self::assertSame(200, $loginResponse['status']);
         self::assertSame('JWT', $body['data']['token_type']);
+        self::assertArrayHasKey('expires_at', $body['data']);
         self::assertSame('JWT', $jwtHeader['typ']);
         self::assertSame('HS256', $jwtHeader['alg']);
 
         $me = self::request('GET', '/auth/me', null, self::authHeaders($token));
 
         self::assertSame(200, $me['status']);
+
+        $tamperedToken = self::tamperToken($token);
+        $tamperedMe = self::request('GET', '/auth/me', null, self::authHeaders($tamperedToken));
+        $tamperedBody = self::json($tamperedMe);
+
+        self::assertSame(401, $tamperedMe['status']);
+        self::assertFalse($tamperedBody['success']);
+        self::assertSame('UNAUTHORIZED', $tamperedBody['error']['code']);
     }
 
     public function testCreateListShowUpdatePatchAndDeleteProduct(): void
@@ -314,8 +323,17 @@ final class ProductEndpointsTest extends TestCase
         self::assertSame(200, $loginResponse['status']);
         self::assertSame('JWT', $body['data']['token_type']);
         self::assertArrayHasKey('access_token', $body['data']);
+        self::assertArrayHasKey('expires_at', $body['data']);
 
         return $body['data']['access_token'];
+    }
+
+    private static function tamperToken(string $token): string
+    {
+        $lastChar = substr($token, -1);
+        $replacement = $lastChar === 'a' ? 'b' : 'a';
+
+        return substr($token, 0, -1) . $replacement;
     }
 
     private static function jwtHeader(string $token): array

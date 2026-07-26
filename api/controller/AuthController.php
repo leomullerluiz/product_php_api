@@ -73,7 +73,7 @@ class AuthController extends BaseController
         }
 
         if ($user === null) {
-            Response::unauthorized('Usuario do token nao encontrado.');
+            Response::unauthorized('Token invalido, expirado ou revogado.');
             return;
         }
 

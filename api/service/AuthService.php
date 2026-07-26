@@ -28,36 +28,57 @@ class AuthService
         }
 
         $safeUser = UserModel::formatUser($user);
-        $token = $this->createToken($safeUser);
+        $session = $this->createSession($safeUser);
 
         return [
             'token_type' => 'JWT',
-            'access_token' => $token,
+            'access_token' => $session['token'],
             'expires_in' => $this->ttl(),
+            'expires_at' => $session['expires_at'],
             'user' => $safeUser,
         ];
     }
 
     public function userFromToken(string $token): ?array
     {
+        $accessToken = AccessTokenModel::findValid($token);
+
+        if ($accessToken === null) {
+            return null;
+        }
+
         $payload = $this->decodeToken($token);
         $userId = isset($payload['sub']) ? (int) $payload['sub'] : 0;
 
-        if ($userId <= 0) {
+        if ($userId <= 0 || $userId !== (int) $accessToken['user_id']) {
             return null;
         }
 
         return UserModel::findById($userId);
     }
 
-    private function createToken(array $user): string
+    private function createSession(array $user): array
+    {
+        $expiresAt = time() + $this->ttl();
+        $token = $this->createToken($user, $expiresAt);
+        $expiresAtIso = gmdate(DATE_ATOM, $expiresAt);
+
+        AccessTokenModel::create((int) $user['id'], $token, $expiresAtIso);
+
+        return [
+            'token' => $token,
+            'expires_at' => $expiresAtIso,
+        ];
+    }
+
+    private function createToken(array $user, int $expiresAt): string
     {
         $now = time();
         $payload = [
             'iss' => $this->config['name'],
             'iat' => $now,
             'nbf' => $now,
-            'exp' => $now + $this->ttl(),
+            'exp' => $expiresAt,
             'sub' => (string) $user['id'],
             'login' => $user['login'],
             'name' => $user['name'] ?? null,

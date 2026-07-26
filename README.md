@@ -26,6 +26,11 @@ curl -X POST http://localhost:8080/auth/login \
   -d "{\"login\":\"admin\",\"senha\":\"admin123\"}"
 ```
 
+A resposta do login retorna `access_token`, `expires_in` e `expires_at`. O
+token tambem fica registrado na tabela `access_tokens`; em cada requisicao
+protegida, a API valida se o token recebido existe nessa tabela e se
+`expires_at` ainda esta no futuro.
+
 Consultar usuario autenticado:
 
 ```bash
@@ -207,3 +212,12 @@ SENTRY_DSN=https://seu-dsn-do-sentry
 
 No GitHub Actions/Heroku, cadastre `JWT_SECRET` e `SENTRY_DSN` como secrets do
 repositorio.
+
+## Migrations em producao
+
+Depois de publicar uma migration nova na Heroku, aplique os arquivos SQL no
+banco PostgreSQL da aplicacao. Para a tabela de tokens, execute:
+
+```bash
+heroku pg:psql -a product-php-api-d8ee8676232a < migrations/0005_create_access_tokens_table.sql
+```
